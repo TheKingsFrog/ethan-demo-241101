@@ -1,6 +1,7 @@
 package com.ethan.ethandemo241101;
 
 import com.ethan.ethandemo241101.demos.web.User;
+import com.ethan.ethandemo241101.functionalinterface.TestFunctionalInterface;
 import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -104,6 +105,13 @@ class EthanDemo241101ApplicationTests {
         System.out.println(intSummaryStatistics.getSum());
         System.out.println(intSummaryStatistics.getAverage());
         System.out.println(intSummaryStatistics.getCount());
+
+    }
+
+    @Test
+    void test9() {
+
+        TestFunctionalInterface testFunctionalInterface = () -> System.out.println("hello world!");
 
     }
 
