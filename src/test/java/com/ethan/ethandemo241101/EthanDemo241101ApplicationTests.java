@@ -1,8 +1,10 @@
 package com.ethan.ethandemo241101;
 
+import com.ethan.ethandemo241101.demos.web.Person;
 import com.ethan.ethandemo241101.demos.web.User;
 import com.ethan.ethandemo241101.functionalinterface.TestFunctionalInterface;
 import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -112,6 +114,51 @@ class EthanDemo241101ApplicationTests {
     void test9() {
 
         TestFunctionalInterface testFunctionalInterface = () -> System.out.println("hello world!");
+
+    }
+
+    @Test
+    void test10() {
+        Predicate<String> stringPredicate = s -> s.length() > 4;
+        boolean hello = stringPredicate.negate().test("hello");
+        System.out.println(hello);
+    }
+
+    @Test
+    void test11() {
+
+        // 例子：Long转Double
+
+        // 实现方式1
+        Long cash = 10L;
+        String cashStr = String.valueOf(cash);
+        Double cashDouble = Double.valueOf(cash);
+
+        // 实现方式2
+        Function<Long, String> longToStringFunction = String::valueOf;
+        Function<Long, Double> toDoubleFunction = longToStringFunction.andThen(Double::valueOf);
+        toDoubleFunction.apply(10L);
+
+        // 问题：这两种实现方式，哪一种更好？如果是第一种，那第二种通过andThen处理数据有什么优势？
+
+    }
+
+    /**
+     * Comparator多属性排序: 先按名字不分大小写排，再按GID倒序排，最后按年龄正序排
+     */
+    @Test
+    void test12() {
+
+        List<Person> peopleList = Lists.newArrayList(new Person("dai", "301", 10), new Person("dai", "303", 10),
+                new Person("dai", "303", 8), new Person("dai", "303", 6), new Person("dai", "303", 11),
+                new Person("dai", "302", 9), new Person("zhang", "302", 9), new Person("zhang", "301", 9),
+                new Person("Li", "301", 8));
+
+        peopleList.stream()
+                .sorted(Comparator.comparing(Person::getName, String.CASE_INSENSITIVE_ORDER)
+                        .thenComparing(Person::getGid, Comparator.reverseOrder())
+                        .thenComparingInt(Person::getAge)
+                ).forEach(System.out::println);
 
     }
 
