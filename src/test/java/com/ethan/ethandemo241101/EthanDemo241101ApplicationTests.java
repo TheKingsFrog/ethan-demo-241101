@@ -3,6 +3,7 @@ package com.ethan.ethandemo241101;
 import com.ethan.ethandemo241101.demos.web.Person;
 import com.ethan.ethandemo241101.demos.web.User;
 import com.ethan.ethandemo241101.functionalinterface.TestFunctionalInterface;
+import com.ethan.ethandemo241101.myoptional.myException.ValueAbsentException;
 import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -159,6 +160,53 @@ class EthanDemo241101ApplicationTests {
                         .thenComparing(Person::getGid, Comparator.reverseOrder())
                         .thenComparingInt(Person::getAge)
                 ).forEach(System.out::println);
+
+    }
+
+    @Test
+    void test13() {
+
+        // normal optional
+        Optional<Person> personOptional = Optional.of(new Person("dai", "301", 10));
+
+        // null optional
+        Optional<Person> nullOptional = Optional.empty();
+        Optional<Person> nullOptional2 = Optional.ofNullable(null);
+
+        // orElse get
+        Person person = nullOptional.orElse(new Person("null", "null", -1));
+        Person person1 = personOptional.get();
+        System.out.println(person);
+        System.out.println(person1);
+
+        // orElseGet
+        nullOptional.orElseGet(() -> new Person("null", "null", -1));
+
+        // orElseThrow
+        try {
+            nullOptional.orElseThrow(ValueAbsentException::new);
+        } catch (ValueAbsentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        // map
+        personOptional.map(i -> {
+            if(i.getAge() == 10){
+                i.age = -1;
+            } else {
+                i.age = 1;
+            }
+            return i;
+        });
+
+        System.out.println("map result ==>" + personOptional.get());
+
+        // flatmap
+        Optional<Person> newPersonOptional = personOptional.flatMap(i -> {
+            i.age = 1000;
+            return Optional.of(i);
+        });
+        System.out.println(newPersonOptional.get());
 
     }
 
