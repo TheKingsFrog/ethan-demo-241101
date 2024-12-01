@@ -210,4 +210,18 @@ class EthanDemo241101ApplicationTests {
 
     }
 
+    @Test
+    void test14() {
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        System.out.println(contextClassLoader);
+        System.out.println(contextClassLoader.getParent());
+        System.out.println(contextClassLoader.getParent().getParent());
+    }
+
+    @Test
+    void test15() throws ClassNotFoundException {
+        Class<Person> person = (Class<Person>) Class.forName("Person");
+        System.out.println(person);
+    }
+
 }
