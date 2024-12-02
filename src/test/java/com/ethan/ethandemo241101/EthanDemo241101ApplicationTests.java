@@ -9,6 +9,10 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -222,6 +226,93 @@ class EthanDemo241101ApplicationTests {
     void test15() throws ClassNotFoundException {
         Class<Person> person = (Class<Person>) Class.forName("Person");
         System.out.println(person);
+    }
+
+    @Test
+    void test16() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+
+        Class<Person> personClass = Person.class;
+        System.out.println("获取全限定类名");
+        System.out.println(personClass.getName());
+        System.out.println("获取类名");
+        System.out.println(personClass.getSimpleName());
+        System.out.println("实例化对象");
+        Person p1 = personClass.newInstance();
+        System.out.println(p1);
+
+        Person person = new Person();
+        Class<? extends Person> aClass = person.getClass();
+        System.out.println("获取全限定类名");
+        System.out.println(aClass.getName());
+        System.out.println("获取类名");
+        System.out.println(aClass.getSimpleName());
+        System.out.println("实例化对象");
+        Person p2 = aClass.newInstance();
+        System.out.println(p2);
+
+        Class<?> person2 = Class.forName("com.ethan.ethandemo241101.demos.web.Person");
+        System.out.println("获取全限定类名");
+        System.out.println(person2.getName());
+        System.out.println("获取类名");
+        System.out.println(person2.getSimpleName());
+        System.out.println("实例化对象");
+        Person p3 = (Person) person2.newInstance();
+        System.out.println(p3);
+
+    }
+
+    @Test
+    void test17() {
+        Class<Person> personClass = Person.class;
+        Class<? super Person> superclass = personClass.getSuperclass();
+        System.out.println(superclass);
+        System.out.println(personClass);
+    }
+
+    @Test
+    void test18() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Class<?> aClass = Class.forName("com.ethan.ethandemo241101.demos.web.Person");
+        Person person = (Person) aClass.newInstance();
+        System.out.println(person);
+
+        Constructor<?> constructor = aClass.getDeclaredConstructor(String.class);
+        constructor.setAccessible(true);
+        Person person2 = (Person) constructor.newInstance("Hello");
+        System.out.println(person2);
+    }
+
+    @Test
+    void test19() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, InstantiationException {
+        Class<?> aClass = Class.forName("com.ethan.ethandemo241101.demos.web.Person");
+        Field[] declaredFields = aClass.getDeclaredFields();
+
+        Person person = (Person) aClass.newInstance();
+
+        Field phone = aClass.getDeclaredField("phone");
+        phone.setAccessible(true);
+        phone.set(person, "18417173348");
+        System.out.println(person);
+
+        System.out.println(phone.getType());
+
+    }
+
+    @Test
+    void test20() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        Class<?> aClass = Class.forName("com.ethan.ethandemo241101.demos.web.Person");
+
+        Person person = (Person) aClass.newInstance();
+
+        Method setPhone = aClass.getDeclaredMethod("setPhone", String.class);
+
+        setPhone.setAccessible(true);
+
+        setPhone.invoke(person, "hello world 2");
+
+        System.out.println(person);
+
+
     }
 
 }
