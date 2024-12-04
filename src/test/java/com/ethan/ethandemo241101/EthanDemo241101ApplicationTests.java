@@ -1,18 +1,26 @@
 package com.ethan.ethandemo241101;
 
+import com.ethan.ethandemo241101.demos.web.Cat;
 import com.ethan.ethandemo241101.demos.web.Person;
 import com.ethan.ethandemo241101.demos.web.User;
 import com.ethan.ethandemo241101.functionalinterface.TestFunctionalInterface;
+import com.ethan.ethandemo241101.myclassloader.MyClassLoader;
 import com.ethan.ethandemo241101.myoptional.myException.ValueAbsentException;
 import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -311,6 +319,87 @@ class EthanDemo241101ApplicationTests {
         setPhone.invoke(person, "hello world 2");
 
         System.out.println(person);
+
+
+    }
+
+    @Test
+    void test21() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        Person person = (Person) Class.forName("com.ethan.ethandemo241101.demos.web.Person").newInstance();
+        person.sayHello("hcl");
+
+        // 为什么这里会报NoSuchMethod异常？Person类明明是有这个方法的
+        Object object = new Person();
+        // 反射调用 getMethod("sayHello") 时，未明确指定方法的参数类型。getMethod 需要精确匹配方法名和参数类型列表。如果未指定参数类型，而目标方法有参数，就会导致找不到该方法。
+        Method sayHello = object.getClass().getMethod("sayHello", String.class);
+        sayHello.invoke( object, "invoke method");
+
+    }
+
+    @Test
+    void test22() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        MyClassLoader myClassLoader = new MyClassLoader();
+        Class<?> aClass = Class.forName("com.ethan.ethandemo241101.demos.web.Person", true, myClassLoader);
+        aClass.newInstance();
+    }
+
+    @Test
+    void test23() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchFieldException {
+
+        Properties properties = new Properties();
+        properties.load(this.getClass().getClassLoader().getResourceAsStream("re.properties"));
+        String classfullpath = (String) properties.get("classfullpath");
+        String method = properties.get("method").toString();
+        String parameters = Optional.ofNullable(properties.get("parameters").toString()).get();
+
+        Class<?> aClass = Class.forName(classfullpath);
+        Object object = aClass.newInstance();
+
+        Field name = aClass.getDeclaredField("name");
+        name.setAccessible(true);
+        name.set(object, "hahaha");
+
+        Method declaredMethod;
+        if (StringUtils.isNotBlank(parameters)) {
+            declaredMethod = aClass.getDeclaredMethod(method, Class.forName(parameters));
+            declaredMethod.invoke(object, "hello");
+        } else {
+            declaredMethod = aClass.getDeclaredMethod(method);
+            declaredMethod.invoke(object);
+        }
+
+
+    }
+
+    /**
+     * 反射优化
+     * @throws ClassNotFoundException
+     */
+    @Test
+    void test24() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        Cat cat = new Cat();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100000000; i++) {
+            cat.hi();
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("传统方法耗时：" + (end - start) + "ms");
+
+        long start2 = System.currentTimeMillis();
+        Class<?> aClass = Class.forName("com.ethan.ethandemo241101.demos.web.Cat");
+        Object object = aClass.newInstance();
+        Method hi = aClass.getMethod("hi");
+        hi.setAccessible(true);
+        for (int i = 0; i < 100000000; i++) {
+            hi.invoke(object);
+        }
+        long end2 = System.currentTimeMillis();
+        System.out.println("反射方法耗时：" + (end2 - start2) + "ms");
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
 
 
     }

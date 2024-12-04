@@ -33,4 +33,8 @@ public class Person {
 
     public Person(){}
 
+    public void sayHello(String hello) {
+        System.out.println("i'm saying:" + hello);
+    }
+
 }
