@@ -31,7 +31,7 @@ public class IOrderServiceImpl implements IOrderService {
         if(CollectionUtils.isEmpty(orders)){
             return 0d;
         }
-
+        // 123
         return orders.stream().mapToDouble(orderFunction::apply).sum();
 
     }
