@@ -399,7 +399,7 @@ class EthanDemo241101ApplicationTests {
         System.out.println("反射方法耗时：" + (end2 - start2) + "ms");
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
+        System.out.println(classLoader);
 
 
     }
