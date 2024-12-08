@@ -1,6 +1,7 @@
 package com.ethan.ethandemo241101.demos.web;
 
 import com.ethan.ethandemo241101.dao.entity.Order;
+import com.ethan.ethandemo241101.dao.entity.dto.IOrderReqDTO;
 import com.ethan.ethandemo241101.dao.entity.dto.OrderStatusResDTO;
 import com.ethan.ethandemo241101.service.IOrderService;
 import com.ethan.ethandemo241101.utils.annotates.ValidateParameters;
@@ -59,11 +60,19 @@ public class IOrderController {
      */
     @PostMapping("/group-order-status")
     @ValidateParameters
-    public List<OrderStatusResDTO> groupOrderStatus(@RequestBody List<Order> orders) {
+    public List<OrderStatusResDTO> groupOrderStatus(@RequestBody List<Order> orders, String account) {
         return iOrderService.groupOrder(orders, Order::getStatus);
     }
 
-    // 1.封装一个统一响应
-    // 2.入参统一检查
+    /**
+     * 测试全局捕获异常
+     * @param iOrderReqDTO
+     * @return
+     */
+    @PostMapping("/test-1")
+    @ValidateParameters
+    public String test1(@RequestBody IOrderReqDTO iOrderReqDTO) {
+        return iOrderReqDTO.toString();
+    }
 
 }
