@@ -6,6 +6,8 @@ import com.ethan.ethandemo241101.demos.web.User;
 import com.ethan.ethandemo241101.functionalinterface.TestFunctionalInterface;
 import com.ethan.ethandemo241101.myclassloader.MyClassLoader;
 import com.ethan.ethandemo241101.myoptional.myException.ValueAbsentException;
+import com.ethan.ethandemo241101.mythread.MyCallable;
+import com.ethan.ethandemo241101.mythread.MyThread;
 import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -400,6 +403,24 @@ class EthanDemo241101ApplicationTests {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         System.out.println(classLoader);
+
+    }
+
+    @Test
+    void test25() throws ExecutionException, InterruptedException {
+
+        FutureTask<String> stringFutureTask = new FutureTask<>(new MyCallable());
+
+        Thread thread = new Thread(stringFutureTask);
+        thread.start();
+
+        String s = stringFutureTask.get();
+
+        System.out.println(s);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        executorService.execute(new MyThread());
+
 
 
     }
