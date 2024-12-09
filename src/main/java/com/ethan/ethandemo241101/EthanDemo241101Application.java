@@ -3,7 +3,7 @@ package com.ethan.ethandemo241101;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class EthanDemo241101Application {
 
     public static void main(String[] args) {
