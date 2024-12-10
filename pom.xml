@@ -26,7 +26,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,12 +41,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.myspringboot</groupId>
-            <artifactId>myspringboot</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>
@@ -80,7 +73,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.ethan.ethandemo241101.EthanDemo241101Application</mainClass>
+                    <mainClass>com.ethan.businesscore.EthanDemo241101Application</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>

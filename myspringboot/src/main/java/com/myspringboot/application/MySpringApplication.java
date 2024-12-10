@@ -1,18 +1,17 @@
 package com.myspringboot.application;
 
+import com.myspringboot.webserver.MyWebServer;
 import org.apache.catalina.*;
 import org.apache.catalina.connector.Connector;
-import org.apache.catalina.core.ApplicationContext;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.core.StandardEngine;
 import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.startup.Tomcat;
-import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.ServletContext;
+import java.util.Map;
 
 public class MySpringApplication {
 
@@ -25,7 +24,26 @@ public class MySpringApplication {
         // 启动spring 解析传入的类
         context.refresh();
         // 启动tomcat
-        startTomcat(context);
+//        startTomcat(context); 种类单一，需要扩展
+
+        MyWebServer myWebServer = getWebServer(context);
+        myWebServer.start();
+    }
+
+    private static MyWebServer getWebServer(AnnotationConfigWebApplicationContext context) {
+
+        Map<String, MyWebServer> webServerMap = context.getBeansOfType(MyWebServer.class);
+
+        if(webServerMap.isEmpty()){
+            throw new NullPointerException();
+        }
+
+        if(webServerMap.size() > 1){
+            throw new IllegalStateException();
+        }
+
+        return webServerMap.values().stream().findFirst().get();
+
     }
 
     private static void startTomcat(WebApplicationContext webApplicationContext) {
