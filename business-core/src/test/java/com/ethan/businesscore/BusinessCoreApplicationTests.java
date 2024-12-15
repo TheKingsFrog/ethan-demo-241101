@@ -1,6 +1,7 @@
 package com.ethan.businesscore;
 
 import com.ethan.businesscore.functionalinterface.TestFunctionalInterface;
+import com.ethan.businesscore.lock.MyDemoLock;
 import com.ethan.businesscore.myclassloader.MyClassLoader;
 import com.ethan.businesscore.myoptional.myException.ValueAbsentException;
 import com.ethan.businesscore.mythread.MyCallable;
@@ -19,10 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -419,7 +417,41 @@ class BusinessCoreApplicationTests {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         executorService.execute(new MyThread());
 
+    }
 
+    @Test
+    void test26() {
+        ExecutorService executorService = Executors.newFixedThreadPool(1);
+        ExecutorService executorService2 = Executors.newSingleThreadExecutor();
+    }
+
+    @Test
+    public void test27() {
+        MyDemoLock myDemoLock = new MyDemoLock();
+
+        Runnable task = () -> {
+            System.out.println(Thread.currentThread().getName() + "尝试获取锁");
+            myDemoLock.lock();
+            try {
+                System.out.println(System.currentTimeMillis() + " " + Thread.currentThread().getName() + " 获取了锁");
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                myDemoLock.unlock();
+                System.out.println(Thread.currentThread().getName() + "释放了锁");
+            }
+        };
+
+        Thread t1 = new Thread(task, "线程1");
+        Thread t2 = new Thread(task, "线程2");
+        Thread t3 = new Thread(task, "线程3");
+        Thread t4 = new Thread(task, "线程4");
+
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
 
     }
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class IOrderController {
     @PostMapping("/count-total-amount")
     @ValidateParameters
     public Double countTotalAmount(@RequestBody List<Order> orders) {
+        System.out.println(RequestContextHolder.getRequestAttributes());
         return iOrderService.countOrder(orders, Order::getTotalAmount);
     }
 

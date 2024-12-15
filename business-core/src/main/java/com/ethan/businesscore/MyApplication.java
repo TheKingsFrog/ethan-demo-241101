@@ -3,7 +3,7 @@ package com.ethan.businesscore;
 import com.myspringboot.annotations.MySpringBootApplication;
 import com.myspringboot.application.MySpringApplication;
 
-@MySpringBootApplication
+//@MySpringBootApplication
 public class MyApplication {
 
 //    @Bean
