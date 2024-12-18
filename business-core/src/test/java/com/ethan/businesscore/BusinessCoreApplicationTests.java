@@ -1,6 +1,7 @@
 package com.ethan.businesscore;
 
 import com.ethan.businesscore.functionalinterface.TestFunctionalInterface;
+import com.ethan.businesscore.hashcode.MyHashCodeTest;
 import com.ethan.businesscore.lock.MyDemoLock;
 import com.ethan.businesscore.myclassloader.MyClassLoader;
 import com.ethan.businesscore.myoptional.myException.ValueAbsentException;
@@ -452,6 +453,20 @@ class BusinessCoreApplicationTests {
         t2.start();
         t3.start();
         t4.start();
+
+    }
+
+    @Test
+    public void test28() {
+
+        MyHashCodeTest myHashCodeTest = new MyHashCodeTest(1,"hcl");
+        MyHashCodeTest myHashCodeTest2 = new MyHashCodeTest(1, "hcl");
+
+        Map<MyHashCodeTest, String> testMap = new HashMap<>();
+
+        testMap.put(myHashCodeTest, "test");
+
+        System.out.println(testMap.get(myHashCodeTest2));
 
     }
 
