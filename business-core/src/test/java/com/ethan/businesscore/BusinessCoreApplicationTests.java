@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 @SpringBootTest
 class BusinessCoreApplicationTests {
 
+    private volatile boolean flag = false;
+
     @Test
     void contextLoads() {
         System.out.println("hello world!");
@@ -467,6 +469,48 @@ class BusinessCoreApplicationTests {
         testMap.put(myHashCodeTest, "test");
 
         System.out.println(testMap.get(myHashCodeTest2));
+
+    }
+
+    @Test
+    public void test29() throws InterruptedException {
+
+        Thread t1 = new Thread(() -> {
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            flag = true;
+
+            System.out.println("Thread t1 flag change to true");
+
+        });
+
+        Thread t2 = new Thread(() -> {
+
+            while (!flag) {
+                System.out.println("Thread t2 flag is false");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            System.out.println("Thread t2 flag finish");
+
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();  // 主线程等待 thread1 完成
+        t2.join();  // 主线程等待 thread2 完成
+
+        System.out.println("Main thread run finish");
 
     }
 
