@@ -1,7 +1,6 @@
 package com.ethan.businesscore;
 
-import com.ethan.businesscore.dependencyreference.A;
-import com.ethan.businesscore.dependencyreference.B;
+import com.ethan.businesscore.dependencyreference.DepRererConfiguration;
 import com.ethan.businesscore.functionalinterface.TestFunctionalInterface;
 import com.ethan.businesscore.hashcode.MyHashCodeTest;
 import com.ethan.businesscore.lock.MyDemoLock;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
 
 import java.io.IOException;
@@ -527,15 +527,12 @@ class BusinessCoreApplicationTests {
     @Test
     public void test30() throws InterruptedException {
 
-//        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(DepRererConfiguration.class);
-//
-//        System.out.println("Class A:" + annotationConfigApplicationContext.getBean(com.ethan.businesscore.dependencyreference.A.class));
-//        System.out.println("Class B:" + annotationConfigApplicationContext.getBean(com.ethan.businesscore.dependencyreference.B.class));
-//
-//        annotationConfigApplicationContext.close();
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(DepRererConfiguration.class);
 
-        A a = new A();
-        B b = new B();
+        System.out.println("Class A:" + annotationConfigApplicationContext.getBean(com.ethan.businesscore.dependencyreference.A.class));
+        System.out.println("Class B:" + annotationConfigApplicationContext.getBean(com.ethan.businesscore.dependencyreference.B.class));
+
+        annotationConfigApplicationContext.close();
 
     }
 
