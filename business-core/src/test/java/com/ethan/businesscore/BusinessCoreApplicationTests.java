@@ -1,5 +1,7 @@
 package com.ethan.businesscore;
 
+import com.ethan.businesscore.dependencyreference.A;
+import com.ethan.businesscore.dependencyreference.B;
 import com.ethan.businesscore.functionalinterface.TestFunctionalInterface;
 import com.ethan.businesscore.hashcode.MyHashCodeTest;
 import com.ethan.businesscore.lock.MyDemoLock;
@@ -13,7 +15,9 @@ import com.ethan.businesscore.web.User;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -21,7 +25,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -30,6 +37,9 @@ import java.util.stream.Collectors;
 class BusinessCoreApplicationTests {
 
     private volatile boolean flag = false;
+
+    @Autowired
+    private Environment environment;
 
     @Test
     void contextLoads() {
@@ -511,6 +521,32 @@ class BusinessCoreApplicationTests {
         t2.join();  // 主线程等待 thread2 完成
 
         System.out.println("Main thread run finish");
+
+    }
+
+    @Test
+    public void test30() throws InterruptedException {
+
+//        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(DepRererConfiguration.class);
+//
+//        System.out.println("Class A:" + annotationConfigApplicationContext.getBean(com.ethan.businesscore.dependencyreference.A.class));
+//        System.out.println("Class B:" + annotationConfigApplicationContext.getBean(com.ethan.businesscore.dependencyreference.B.class));
+//
+//        annotationConfigApplicationContext.close();
+
+        A a = new A();
+        B b = new B();
+
+    }
+
+    /**
+     * 验证配置文件加载顺序
+     * @throws InterruptedException
+     */
+    @Test
+    public void test31() throws InterruptedException {
+
+        System.out.println(environment.getProperty("spring.main.allow-circular-references"));
 
     }
 
